@@ -44,6 +44,16 @@ module.exports = function(grunt) {
                 src: [targetTestDir + '/**/*.js']
             }
         },
+        watch: {
+            test: {
+                files: ['src/node/**/*'],
+                tasks: ['test'],
+                options: {
+                    spawn: true,
+                    atBegin: true
+                }
+            }
+        },
         execute: {
             server: {
                 src: targetMainDir + '/index.js'
