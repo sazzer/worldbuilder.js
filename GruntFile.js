@@ -10,9 +10,12 @@ module.exports = function(grunt) {
                 sourceMap: true
             }, 
             server: {
-                files: {
-                    'target/server.js': 'src/main/node/index.js'
-                }
+                files: [{
+                    expand: true,
+                    cwd: 'src/main/node',
+                    src: ['**/*.js'],
+                    dest: 'target'
+                }]
             }
         }
     });
