@@ -1,5 +1,6 @@
-var targetDir = 'target/main';
-var targetTestDir = 'target/test';
+var targetDir = 'target';
+var targetMainDir = targetDir + '/main';
+var targetTestDir = targetDir + '/test';
 
 module.exports = function(grunt) {
     require('jit-grunt')(grunt);
@@ -10,7 +11,7 @@ module.exports = function(grunt) {
         pkg: grunt.file.readJSON('package.json'),
         clean: {
             server: {
-                src: targetDir
+                src: 'target'
             }
         },
         babel: {
@@ -20,15 +21,15 @@ module.exports = function(grunt) {
             server: {
                 files: [{
                     expand: true,
-                    cwd: 'src/main/node',
+                    cwd: 'src/node/main',
                     src: ['**/*.js'],
-                    dest: targetDir
+                    dest: targetMainDir
                 }]
             },
             test: {
                 files: [{
                     expand: true,
-                    cwd: 'src/test/node',
+                    cwd: 'src/node/test',
                     src: ['**/*.js'],
                     dest: targetTestDir
                 }]
@@ -45,7 +46,7 @@ module.exports = function(grunt) {
         },
         execute: {
             server: {
-                src: targetDir + '/index.js'
+                src: targetMainDir + '/index.js'
             }
         }
     });
