@@ -17,11 +17,17 @@ module.exports = function(grunt) {
                     dest: 'target'
                 }]
             }
+        },
+        execute: {
+            server: {
+                src: 'target/index.js'
+            }
         }
     });
 
     // Default task(s).
     grunt.registerTask('default', ['babel:server']);
 
+    grunt.registerTask('run', ['default', 'execute:server']);
 };
 
