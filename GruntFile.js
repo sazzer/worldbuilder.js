@@ -1,4 +1,5 @@
-var targetDir = 'target';
+var targetDir = 'target/main';
+var targetTestDir = 'target/test';
 
 module.exports = function(grunt) {
     require('jit-grunt')(grunt);
@@ -23,6 +24,23 @@ module.exports = function(grunt) {
                     src: ['**/*.js'],
                     dest: targetDir
                 }]
+            },
+            test: {
+                files: [{
+                    expand: true,
+                    cwd: 'src/test/node',
+                    src: ['**/*.js'],
+                    dest: targetTestDir
+                }]
+            }
+        },
+        mochaTest: {
+            test: {
+                options: {
+                    reporter: 'spec',
+                    growl: true
+                },
+                src: [targetTestDir + '/**/*.js']
             }
         },
         execute: {
@@ -35,6 +53,7 @@ module.exports = function(grunt) {
     grunt.registerTask('build', ['babel:server']);
 
     grunt.registerTask('run', ['build', 'execute:server']);
+    grunt.registerTask('test', ['build', 'babel:test', 'mochaTest:test']);
 
     // Default task(s).
     grunt.registerTask('default', ['build']);
