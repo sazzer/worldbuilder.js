@@ -1,3 +1,5 @@
+var targetDir = 'target';
+
 module.exports = function(grunt) {
     require('jit-grunt')(grunt);
     require('time-grunt')(grunt);
@@ -7,7 +9,7 @@ module.exports = function(grunt) {
         pkg: grunt.file.readJSON('package.json'),
         clean: {
             server: {
-                src: 'target'
+                src: targetDir
             }
         },
         babel: {
@@ -19,13 +21,13 @@ module.exports = function(grunt) {
                     expand: true,
                     cwd: 'src/main/node',
                     src: ['**/*.js'],
-                    dest: 'target'
+                    dest: targetDir
                 }]
             }
         },
         execute: {
             server: {
-                src: 'target/index.js'
+                src: targetDir + '/index.js'
             }
         }
     });
