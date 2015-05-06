@@ -5,6 +5,11 @@ module.exports = function(grunt) {
     // Project configuration.
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
+        clean: {
+            server: {
+                src: 'target'
+            }
+        },
         babel: {
             options: {
                 sourceMap: true
@@ -25,9 +30,11 @@ module.exports = function(grunt) {
         }
     });
 
-    // Default task(s).
-    grunt.registerTask('default', ['babel:server']);
+    grunt.registerTask('build', ['babel:server']);
 
-    grunt.registerTask('run', ['default', 'execute:server']);
+    grunt.registerTask('run', ['build', 'execute:server']);
+
+    // Default task(s).
+    grunt.registerTask('default', ['build']);
 };
 

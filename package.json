@@ -25,6 +25,7 @@
     "grunt-babel": "^5.0.0",
     "jit-grunt": "^0.9.1",
     "time-grunt": "^1.1.1",
-    "grunt-execute": "~0.2.2"
+    "grunt-execute": "~0.2.2",
+    "grunt-contrib-clean": "~0.6.0"
   }
 }
