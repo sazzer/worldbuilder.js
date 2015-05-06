@@ -1,15 +1,8 @@
-import {Handler} from './handler';
 import {config} from './config';
+import {Server} from './server/server';
 
-const Percolator = require('percolator').Percolator;
-
-const server = new Percolator({
+const server = new Server({
     port: config.port
 });
 
-server.route('/hello', Handler);
-
-server.listen((err) => {
-    console.log('server is listening on port ', server.port);
-});
-
+server.run();
