@@ -17,10 +17,15 @@ module.exports = function(grunt) {
                 src: 'target'
             }
         },
+        env: {
+            server: {
+                NODE_PATH: targetMainDir
+            }
+        },
         babel: {
             options: {
                 sourceMap: true
-            }, 
+            },
             server: {
                 files: [{
                     expand: true,
@@ -96,10 +101,9 @@ module.exports = function(grunt) {
     grunt.registerTask('build', ['babel:server']);
     grunt.registerTask('doc', ['json_generator:esdoc', 'execute:esdoc']);
 
-    grunt.registerTask('run', ['build', 'execute:server']);
-    grunt.registerTask('test', ['build', 'babel:test', 'mochaTest:test']);
+    grunt.registerTask('run', ['env:server', 'build', 'execute:server']);
+    grunt.registerTask('test', ['env:server', 'build', 'babel:test', 'mochaTest:test']);
 
     // Default task(s).
     grunt.registerTask('default', ['build', 'doc', 'test']);
 };
-
