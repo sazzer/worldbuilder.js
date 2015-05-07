@@ -68,9 +68,9 @@ module.exports = function(grunt) {
             }
         },
         watch: {
-            test: {
+            build: {
                 files: ['src/node/**/*'],
-                tasks: ['test'],
+                tasks: ['doc', 'test'],
                 options: {
                     spawn: true,
                     atBegin: true
