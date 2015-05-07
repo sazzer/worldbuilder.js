@@ -6,7 +6,9 @@ var targetTestDir = path.join(targetDir, 'test');
 var targetDocDir = path.join(targetDir, 'doc');
 
 module.exports = function(grunt) {
-    require('jit-grunt')(grunt);
+    require('jit-grunt')(grunt, {
+        mochacli: 'grunt-mocha-cli'
+    });
     require('time-grunt')(grunt);
 
     // Project configuration.
@@ -43,13 +45,13 @@ module.exports = function(grunt) {
                 }]
             }
         },
-        mochaTest: {
-            test: {
+        mochacli: {
+            server: {
                 options: {
+                    resursive: true,
                     reporter: 'spec',
-                    growl: true
-                },
-                src: [path.join(targetTestDir, '**/*.js')]
+                    files: [path.join(targetTestDir, '**/*.js')]
+                }
             }
         },
         json_generator: {
@@ -102,7 +104,7 @@ module.exports = function(grunt) {
     grunt.registerTask('doc', ['json_generator:esdoc', 'execute:esdoc']);
 
     grunt.registerTask('run', ['env:server', 'build', 'execute:server']);
-    grunt.registerTask('test', ['env:server', 'build', 'babel:test', 'mochaTest:test']);
+    grunt.registerTask('test', ['env:server', 'build', 'babel:test', 'mochacli:server']);
 
     // Default task(s).
     grunt.registerTask('default', ['build', 'doc', 'test']);
