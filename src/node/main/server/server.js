@@ -18,6 +18,26 @@ export class Server {
     }
 
     /**
+     * Add a collection of handlers to the server
+     * @param {Object} handler - the handlers to register. The key is the route and the value is the
+     * handler for this route
+     */
+    addHandlers(handlers) {
+        Object.keys(handlers).forEach((key) => {
+            this.addHandler(key, handlers[key]);
+        });
+    }
+
+    /**
+     * Add a new handler to the server
+     * @param {string} route - The route to add the handler onto
+     * @param {Object} handler - The handler to add
+     */
+    addHandler(route, handler) {
+        this._percolator.route(route, handler);
+    }
+
+    /**
      * Actually start the server running
      * @access public
      */
