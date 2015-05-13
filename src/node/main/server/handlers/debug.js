@@ -1,7 +1,5 @@
-export default {
-    '/api/debug/hello': {
-        GET : (req, res) => {
-            res.object({message : 'Hello World!'}).send();
-        }
-    }
-};
+export default function(app) {
+    app.get("/api/debug/ping", (req, res) => {
+        res.json({message: 'Hello, World!'});
+    });
+}

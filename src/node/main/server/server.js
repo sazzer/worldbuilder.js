@@ -17,6 +17,23 @@ export class Server {
      */
     constructor(options = {port: 5000}) {
         this._port = options.port;
+        this._handlers = [];
+    }
+
+    /**
+     * Add a new handler to the server
+     * @param {function} handler - The function that will register the handlers
+     */
+    addHandler(handler) {
+        this._handlers.push(handler);
+    }
+
+    /**
+     * Add a list of handlers to the server
+     * @param {array} handlers - The list of functions that will register handlers
+     */
+    addHandlers(handlers) {
+        handlers.forEach((h) => this.addHandler(h));
     }
 
     /**
@@ -30,9 +47,7 @@ export class Server {
         app.use(morgan('combined'));
         app.use(responseTime());
 
-        app.get("/api/debug/ping", (req, res) => {
-            res.json({'Hello': 'World'});
-        });
+        this._handlers.forEach((handler) => handler(app));
 
         const http = HttpServer(app);
         http.listen(this._port, () => {
