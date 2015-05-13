@@ -1,4 +1,6 @@
-import {Percolator} from 'percolator';
+import app from 'express';
+import {Server as HttpServer} from 'http';
+import bodyParser from 'body-parser';
 
 /**
  * The actual main server that does all of the HTTP work
@@ -11,30 +13,8 @@ export class Server {
      * @param {number} [options.port] - The port number to listen on
      * @access public
      */
-    constructor(options = {}) {
-        this._percolator = new Percolator({
-            port: options.port
-        });
-    }
-
-    /**
-     * Add a collection of handlers to the server
-     * @param {Object} handler - the handlers to register. The key is the route and the value is the
-     * handler for this route
-     */
-    addHandlers(handlers) {
-        Object.keys(handlers).forEach((key) => {
-            this.addHandler(key, handlers[key]);
-        });
-    }
-
-    /**
-     * Add a new handler to the server
-     * @param {string} route - The route to add the handler onto
-     * @param {Object} handler - The handler to add
-     */
-    addHandler(route, handler) {
-        this._percolator.route(route, handler);
+    constructor(options = {port: 5000}) {
+        this._port = options.port;
     }
 
     /**
@@ -42,8 +22,13 @@ export class Server {
      * @access public
      */
     run() {
-        this._percolator.listen((err) => {
-            console.log('server is listening on port: ', this._percolator.port);
+        this._app = app();
+        this._http = HttpServer(this._app);
+        this._app.use(bodyParser.urlencoded({extended: false}));
+        this._app.use(bodyParser.json());
+
+        this._http.listen(this._port, () => {
+            console.log("Listening on port: " + this._port);
         });
     }
 };
