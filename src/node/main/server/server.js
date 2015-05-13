@@ -2,6 +2,7 @@ import app from 'express';
 import {Server as HttpServer} from 'http';
 import bodyParser from 'body-parser';
 import morgan from 'morgan';
+import responseTime from 'response-time';
 
 /**
  * The actual main server that does all of the HTTP work
@@ -28,6 +29,7 @@ export class Server {
         this._app.use(bodyParser.urlencoded({extended: false}));
         this._app.use(bodyParser.json());
         this._app.use(morgan('combined'));
+        this._app.use(responseTime());
         
         this._http.listen(this._port, () => {
             console.log("Listening on port: " + this._port);
