@@ -1,3 +1,3 @@
 import {loadRoutes} from './loadRoutes';
 
-export loadRoutes;
+export {loadRoutes};
