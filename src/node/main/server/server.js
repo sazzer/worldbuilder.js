@@ -1,4 +1,4 @@
-import app from 'express';
+import express from 'express';
 import {Server as HttpServer} from 'http';
 import bodyParser from 'body-parser';
 import morgan from 'morgan';
@@ -24,14 +24,14 @@ export class Server {
      * @access public
      */
     run() {
-        this._app = app();
-        this._http = HttpServer(this._app);
-        this._app.use(bodyParser.urlencoded({extended: false}));
-        this._app.use(bodyParser.json());
-        this._app.use(morgan('combined'));
-        this._app.use(responseTime());
-        
-        this._http.listen(this._port, () => {
+        const app = express();
+        app.use(bodyParser.urlencoded({extended: false}));
+        app.use(bodyParser.json());
+        app.use(morgan('combined'));
+        app.use(responseTime());
+
+        const http = HttpServer(app);
+        http.listen(this._port, () => {
             console.log("Listening on port: " + this._port);
         });
     }
