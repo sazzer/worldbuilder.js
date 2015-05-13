@@ -30,6 +30,10 @@ export class Server {
         app.use(morgan('combined'));
         app.use(responseTime());
 
+        app.get("/api/debug/ping", (req, res) => {
+            res.json({'Hello': 'World'});
+        });
+
         const http = HttpServer(app);
         http.listen(this._port, () => {
             console.log("Listening on port: " + this._port);
