@@ -40,6 +40,7 @@ export class Server {
 
         app.use((req, res, next) => {
             const requestId = req.id;
+            res.set('X-Request-ID', requestId);
             LOG.debug({req_id: requestId}, "New request: " + requestId);
 
             const namespace = getNamespace('uk.co.grahamcox.worldbuilder');
