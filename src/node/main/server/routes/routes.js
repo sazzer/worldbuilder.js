@@ -37,7 +37,7 @@ export class Routes {
                 if (handlerMethod !== undefined) {
                     const expressMethod = route.method.toLowerCase();
 
-                    LOG.debug(`${route.method} ${url} => ${route.module}.${route.entity}`);
+                    LOG.info(`${route.method} ${url} => ${route.module}.${route.entity}`);
 
                     app[expressMethod](url, handlerMethod);
                 } else {

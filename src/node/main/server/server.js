@@ -1,9 +1,9 @@
 import express from 'express';
 import {Server as HttpServer} from 'http';
 import bodyParser from 'body-parser';
-import morgan from 'morgan';
 import responseTime from 'response-time';
 import {createLogger} from 'bunyan';
+import expressLogger from 'express-bunyan-logger';
 
 /** The logger to use */
 const LOG = createLogger({name: 'server.routes.routes'});
@@ -33,7 +33,8 @@ export class Server {
         const app = express();
         app.use(bodyParser.urlencoded({extended: false}));
         app.use(bodyParser.json());
-        app.use(morgan('combined'));
+        app.use(expressLogger());
+        app.use(expressLogger.errorLogger());
         app.use(responseTime());
 
         this._routes.apply(app, '/api');
