@@ -24,6 +24,7 @@
     "byline": "^4.2.1",
     "chai": "^2.3.0",
     "comfy": "~0.1.1",
+    "continuation-local-storage": "^3.1.4",
     "esdoc": "^0.1.0",
     "express": "~4.12.3",
     "express-bunyan-logger": "^1.1.1",

@@ -4,10 +4,12 @@ import {Routes} from 'server/routes/routes';
 import {Route} from 'server/routes/route';
 import {loadRoutes} from 'server/routes';
 import {createLogger} from 'bunyan';
+import {createNamespace} from 'continuation-local-storage';
 
 /** The logger to use */
 const LOG = createLogger({name: 'server.routes.routes'});
 
+createNamespace('uk.co.grahamcox.worldbuilder');
 
 loadRoutes('target/main/routes')
     .then((routes) => {

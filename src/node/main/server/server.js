@@ -4,6 +4,7 @@ import bodyParser from 'body-parser';
 import responseTime from 'response-time';
 import {createLogger} from 'bunyan';
 import expressLogger from 'express-bunyan-logger';
+import {getNamespace} from 'continuation-local-storage';
 
 /** The logger to use */
 const LOG = createLogger({name: 'server.routes.routes'});
@@ -36,6 +37,21 @@ export class Server {
         app.use(expressLogger());
         app.use(expressLogger.errorLogger());
         app.use(responseTime());
+
+        app.use((req, res, next) => {
+            const requestId = req.id;
+            LOG.debug({req_id: requestId}, "New request: " + requestId);
+
+            const namespace = getNamespace('uk.co.grahamcox.worldbuilder');
+
+            namespace.bindEmitter(req);
+            namespace.bindEmitter(res);
+            namespace.run(() => {
+                namespace.set('requestId', requestId);
+                next();
+            });
+        });
+
 
         this._routes.apply(app, '/api');
 
