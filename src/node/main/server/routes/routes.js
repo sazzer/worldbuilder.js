@@ -7,7 +7,7 @@ export class Routes {
      * {array} routes - The array of all loaded routes
      */
     constructor(routes) {
-        this._routes = routes;       
+        this._routes = routes;
     }
 
     /**
@@ -27,12 +27,20 @@ export class Routes {
         this._routes.forEach((route) => {
             const url = base + route.url;
             const handler = require(route.module);
-            const handlerMethod = handler[route.entity];
-            const expressMethod = route.method.toLowerCase();
+            if (handler !== undefined) {
+                const handlerMethod = handler[route.entity];
+                if (handlerMethod !== undefined) {
+                    const expressMethod = route.method.toLowerCase();
 
-            console.log(`${route.method} ${url} => ${handlerMethod}`);
+                    console.log(`${route.method} ${url} => ${handlerMethod}`);
 
-            app[expressMethod](url, handlerMethod);
+                    app[expressMethod](url, handlerMethod);
+                } else {
+                    console.log(`Handler entity not found: ${route.module}.${route.entity}`);
+                }
+            } else {
+                console.log(`Handler module not found: ${route.module}`);
+            }
         });
     }
 }

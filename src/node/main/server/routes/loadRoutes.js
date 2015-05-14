@@ -4,6 +4,12 @@ import {createReadStream} from 'fs';
 import {LineStream} from 'byline';
 import {Transform} from 'stream';
 
+/** The regex to match a line */
+const LINE_REGEX = /^([A-Za-z]+)\s+'(.+?)'\s*=\s*'(.+?)#(.+?)'(, *(.*))?$/;
+
+/** The regex to match a comment line */
+const COMMENT_REGEX = /^\#/;
+
 /**
  * Transform Stream to parse a line in the routes file into an actual Route
  */
@@ -22,7 +28,24 @@ class RouteParsingStream extends Transform {
      * @param {function} callback - The callback function to use
      */
     _transform(chunk, encoding, callback) {
-        this.push(new Route('GET', '/debug/ping', 'server/handlers/debug', 'ping'));
+
+        if (!COMMENT_REGEX.test(chunk)) {
+            const result = chunk.match(LINE_REGEX);
+            if (result) {
+                const method = result[1];
+                const url = result[2];
+                const module = result[3];
+                const entity = result[4];
+
+                this.push(new Route(method,
+                    url,
+                    module,
+                    entity));
+            } else {
+                console.log(`Invalid line: ${chunk}`);
+            }
+        }
+
         callback();
     }
 }
@@ -41,7 +64,7 @@ export function loadRoutes(routesFile) {
         const source = createReadStream(routesFile, {encoding: 'utf8'})
             .pipe(new LineStream())
             .pipe(new RouteParsingStream());
-            
+
         source.on('data', (route) => {
             console.log('Adding route:  ' + route);
             routes.push(route);

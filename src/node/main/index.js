@@ -13,4 +13,6 @@ loadRoutes('/Users/coxg/temp/worldbuilder/src/node/main/routes')
         });
 
         server.run();
+    }).catch((e) => {
+        console.log(`Error loading routes: ${e}`);
     });
