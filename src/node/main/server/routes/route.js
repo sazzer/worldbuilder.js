@@ -57,4 +57,11 @@ export class Route {
      get name() {
          return this._name;
      }
+
+     /**
+      * Generate a string for the route
+      */
+     toString() {
+         return `${this._method} ${this._url} => ${this._module}.${this.entity} as ${this._name}`
+     }
 }
