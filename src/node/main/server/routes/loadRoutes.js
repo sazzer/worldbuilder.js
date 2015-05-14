@@ -1,8 +1,12 @@
+import {createLogger} from 'bunyan';
 import {Routes} from './routes';
 import {Route} from './route';
 import {createReadStream} from 'fs';
 import {LineStream} from 'byline';
 import {Transform} from 'stream';
+
+/** The logger to use */
+const LOG = createLogger({name: 'server.routes.loadRoutes'});
 
 /** The regex to match a comment line */
 const COMMENT_REGEX = /^\#/;
@@ -57,7 +61,7 @@ class RouteParsingStream extends Transform {
                         .forEach((flag) => {
                             const key = flag[0];
                             const value = flag[1];
-                            console.log(`Flag ${key} = ${value}`);
+                            LOG.debug(`Flag ${key} = ${value}`);
                             flags[key.trim()] = value.trim();
                         });
                 }
@@ -69,7 +73,7 @@ class RouteParsingStream extends Transform {
                     entity,
                     flags));
             } else {
-                console.log(`Invalid line: ${chunk}`);
+                LOG.warn(`Invalid line: ${chunk}`);
             }
         }
 
@@ -86,24 +90,24 @@ export function loadRoutes(routesFile) {
     return new Promise((resolve, reject) => {
         const routes = [];
 
-        console.log('Loading routes from: ' + routesFile);
+        LOG.info('Loading routes from: ' + routesFile);
 
         const source = createReadStream(routesFile, {encoding: 'utf8'})
             .pipe(new LineStream())
             .pipe(new RouteParsingStream());
 
         source.on('data', (route) => {
-            console.log('Adding route: ' + route);
+            LOG.debug('Adding route: ' + route);
             routes.push(route);
         });
 
         source.on('error', (e) => {
-            console.log(`Error loading routes: ${e}`);
+            LOG.error(`Error loading routes: ${e}`);
             reject(e);
         });
 
         source.on('finish', () => {
-            console.log('Finished loading routes');
+            LOG.trace('Finished loading routes');
             resolve(new Routes(routes));
         });
     });

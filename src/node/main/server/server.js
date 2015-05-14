@@ -3,6 +3,11 @@ import {Server as HttpServer} from 'http';
 import bodyParser from 'body-parser';
 import morgan from 'morgan';
 import responseTime from 'response-time';
+import {createLogger} from 'bunyan';
+
+/** The logger to use */
+const LOG = createLogger({name: 'server.routes.routes'});
+
 
 /**
  * The actual main server that does all of the HTTP work
@@ -35,7 +40,7 @@ export class Server {
 
         const http = HttpServer(app);
         http.listen(this._port, () => {
-            console.log("Listening on port: " + this._port);
+            LOG.info("Listening on port: " + this._port);
         });
     }
 };

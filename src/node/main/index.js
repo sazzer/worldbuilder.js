@@ -3,6 +3,11 @@ import {Server} from 'server/server';
 import {Routes} from 'server/routes/routes';
 import {Route} from 'server/routes/route';
 import {loadRoutes} from 'server/routes';
+import {createLogger} from 'bunyan';
+
+/** The logger to use */
+const LOG = createLogger({name: 'server.routes.routes'});
+
 
 loadRoutes('/Users/coxg/temp/worldbuilder/src/node/main/routes')
     .then((routes) => {
@@ -14,5 +19,5 @@ loadRoutes('/Users/coxg/temp/worldbuilder/src/node/main/routes')
 
         server.run();
     }).catch((e) => {
-        console.log(`Error loading routes: ${e}`);
+        LOG.error(`Error loading routes: ${e}`);
     });

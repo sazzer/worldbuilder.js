@@ -1,3 +1,8 @@
+import {createLogger} from 'bunyan';
+
+/** The logger to use */
+const LOG = createLogger({name: 'server.routes.routes'});
+
 /**
  * Representation of the entire set of routes in the system
  */
@@ -32,14 +37,14 @@ export class Routes {
                 if (handlerMethod !== undefined) {
                     const expressMethod = route.method.toLowerCase();
 
-                    console.log(`${route.method} ${url} => ${handlerMethod}`);
+                    LOG.debug(`${route.method} ${url} => ${route.module}.${route.entity}`);
 
                     app[expressMethod](url, handlerMethod);
                 } else {
-                    console.log(`Handler entity not found: ${route.module}.${route.entity}`);
+                    LOG.warn(`Handler entity not found: ${route.module}.${route.entity}`);
                 }
             } else {
-                console.log(`Handler module not found: ${route.module}`);
+                LOG.warn(`Handler module not found: ${route.module}`);
             }
         });
     }
