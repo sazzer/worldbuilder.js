@@ -9,7 +9,7 @@ import {createLogger} from 'bunyan';
 const LOG = createLogger({name: 'server.routes.routes'});
 
 
-loadRoutes('/Users/coxg/temp/worldbuilder/src/node/main/routes')
+loadRoutes('target/main/routes')
     .then((routes) => {
 
         const server = new Server({

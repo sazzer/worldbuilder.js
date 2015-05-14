@@ -46,6 +46,16 @@ module.exports = function(grunt) {
                 }]
             }
         },
+        copy: {
+            server: {
+                files: [
+                    {
+                        src: 'src/node/main/routes',
+                        dest: path.join(targetMainDir, 'routes')
+                    }
+                ]
+            }
+        },
         mochacli: {
             server: {
                 options: {
@@ -87,7 +97,10 @@ module.exports = function(grunt) {
         },
         execute: {
             server: {
-                src: path.join(targetMainDir, 'index.js')
+                src: path.join(targetMainDir, 'index.js'),
+                optoins: {
+                    cwd: targetMainDir
+                }
             },
             esdoc: {
                 src: 'node_modules/.bin/esdoc',
@@ -101,7 +114,7 @@ module.exports = function(grunt) {
         }
     });
 
-    grunt.registerTask('build', ['babel:server']);
+    grunt.registerTask('build', ['babel:server', 'copy:server']);
     grunt.registerTask('doc', ['json_generator:esdoc', 'execute:esdoc']);
 
     grunt.registerTask('run', ['env:server', 'build', 'execute:server']);
