@@ -10,7 +10,7 @@ export class Route {
      * @param {string} entity - The entity in the module to handle the route
      * @param {string} [name] - The name of the route
      */
-    constructor(method, url, module, entity, {name} = {name: method + ":" + url}) {
+    constructor(method, url, module, entity, {name = method + ":" + url} = {}) {
         this._method = method;
         this._url = url;
         this._module = module;

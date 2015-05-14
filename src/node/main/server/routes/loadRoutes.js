@@ -4,11 +4,22 @@ import {createReadStream} from 'fs';
 import {LineStream} from 'byline';
 import {Transform} from 'stream';
 
+/** The regex to match a comment line */
+const COMMENT_REGEX = /^\#/;
+
 /** The regex to match a line */
 const LINE_REGEX = /^([A-Za-z]+)\s+'(.+?)'\s*=\s*'(.+?)#(.+?)'(, *(.*))?$/;
 
-/** The regex to match a comment line */
-const COMMENT_REGEX = /^\#/;
+/** Regex group for the HTTP Method */
+const METHOD_GROUP = 1;
+/** Regex group for the URL  */
+const URL_GROUP = 2;
+/** Regex group for the module */
+const MODULE_GROUP = 3;
+/** Regex group for the entity in the module */
+const ENTITY_GROUP = 4;
+/** Regex group for the route flags */
+const FLAGS_GROUP = 5;
 
 /**
  * Transform Stream to parse a line in the routes file into an actual Route
@@ -30,17 +41,33 @@ class RouteParsingStream extends Transform {
     _transform(chunk, encoding, callback) {
 
         if (!COMMENT_REGEX.test(chunk)) {
-            const result = chunk.match(LINE_REGEX);
+            const result = chunk.trim().match(LINE_REGEX);
             if (result) {
-                const method = result[1];
-                const url = result[2];
-                const module = result[3];
-                const entity = result[4];
+                const method = result[METHOD_GROUP].trim();
+                const url = result[URL_GROUP].trim();
+                const module = result[MODULE_GROUP].trim();
+                const entity = result[ENTITY_GROUP].trim();
+                const flags = {};
+
+                if (result[FLAGS_GROUP]) {
+                    result[FLAGS_GROUP].split(/,/)
+                        .map((flag) => flag.trim())
+                        .filter((flag) => flag !== undefined && flag !== "")
+                        .map((flag) => flag.split(/:/))
+                        .forEach((flag) => {
+                            const key = flag[0];
+                            const value = flag[1];
+                            console.log(`Flag ${key} = ${value}`);
+                            flags[key.trim()] = value.trim();
+                        });
+                }
+
 
                 this.push(new Route(method,
                     url,
                     module,
-                    entity));
+                    entity,
+                    flags));
             } else {
                 console.log(`Invalid line: ${chunk}`);
             }
@@ -66,7 +93,7 @@ export function loadRoutes(routesFile) {
             .pipe(new RouteParsingStream());
 
         source.on('data', (route) => {
-            console.log('Adding route:  ' + route);
+            console.log('Adding route: ' + route);
             routes.push(route);
         });
 
