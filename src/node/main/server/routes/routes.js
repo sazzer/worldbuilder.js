@@ -1,4 +1,4 @@
-import {createLogger} from 'bunyan';
+import {createLogger} from 'logger';
 
 /** The logger to use */
 const LOG = createLogger({name: 'server.routes.routes'});

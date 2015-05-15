@@ -2,7 +2,7 @@ import express from 'express';
 import {Server as HttpServer} from 'http';
 import bodyParser from 'body-parser';
 import responseTime from 'response-time';
-import {createLogger} from 'bunyan';
+import {createLogger} from 'logger';
 import expressLogger from 'express-bunyan-logger';
 import {getNamespace} from 'continuation-local-storage';
 

@@ -1,5 +1,4 @@
-import {createLogger} from 'bunyan';
-import {getNamespace} from 'continuation-local-storage';
+import {createLogger} from 'logger';
 
 /** The logger to use */
 const LOG = createLogger({name: 'server.handlers.authentication.oauth2'});
@@ -86,11 +85,8 @@ export function token(req, res) {
  * @return {Promise} a promise for the authentication token
  */
 function resourceOwnerPasswordCredentialsToken({username, password, scope}) {
-    const namespace = getNamespace('uk.co.grahamcox.worldbuilder');
-    const requestId = namespace.get('requestId');
-
     return new Promise((resolve, reject) => {
-        LOG.info({req_id: requestId, username, scope}, "Performing a Resource Owner Password Credentials Grant");
+        LOG.info({username, scope}, "Performing a Resource Owner Password Credentials Grant");
         reject({error: 'bugger'});
     });
 }

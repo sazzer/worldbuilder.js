@@ -3,7 +3,7 @@ import {Server} from 'server/server';
 import {Routes} from 'server/routes/routes';
 import {Route} from 'server/routes/route';
 import {loadRoutes} from 'server/routes';
-import {createLogger} from 'bunyan';
+import {createLogger} from 'logger';
 import {createNamespace} from 'continuation-local-storage';
 
 /** The logger to use */

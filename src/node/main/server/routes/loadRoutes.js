@@ -1,4 +1,4 @@
-import {createLogger} from 'bunyan';
+import {createLogger} from 'logger';
 import {Routes} from './routes';
 import {Route} from './route';
 import {createReadStream} from 'fs';
