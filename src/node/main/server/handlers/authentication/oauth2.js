@@ -1,5 +1,8 @@
 import {createLogger} from 'logger';
 import {getUserByUsername} from 'users/userService';
+import {authenticateUser} from 'authentication/authenticationService';
+import {now} from 'clock';
+import moment from 'moment-timezone';
 
 /** The logger to use */
 const LOG = createLogger({name: 'server.handlers.authentication.oauth2'});
@@ -67,9 +70,15 @@ export function token(req, res) {
             res.status(400).json({ error: 'invalid_request' });
         } else {
             handler.handler(params)
-                .then(() => {
-                    LOG.info("OAuth2 Token request succeeded");
-                    res.json("Hello");
+                .then((token) => {
+                    LOG.info(token, "OAuth2 Token request succeeded");
+                    const expiryTime = moment.duration(token.expires.diff(now()))
+
+                    res.json({
+                        access_token: token.token,
+                        token_type: 'Bearer',
+                        expires_in: expiryTime.asSeconds()
+                    });
                 }).catch((e) => {
                     LOG.info(e, "OAuth2 Token request failed");
                     res.status(400).json(e);
@@ -102,7 +111,7 @@ function resourceOwnerPasswordCredentialsToken({username, password, scope}) {
                     error: 'user_disabled'
                 };
             } else {
-                return user;
+                return authenticateUser(user);
             }
         })
         .catch((e) => {

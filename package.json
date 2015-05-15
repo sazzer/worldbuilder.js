@@ -8,8 +8,8 @@
     "test": "grunt test",
     "start": "grunt run"
   },
-  "engines" : { 
-      "node" : ">=0.12" 
+  "engines": {
+    "node": ">=0.12"
   },
   "repository": {
     "type": "git",
@@ -43,6 +43,7 @@
     "grunt-mocha-cli": "~1.13.0",
     "jit-grunt": "^0.9.1",
     "mocha": "^2.2.4",
+    "moment-timezone": "^0.3.1",
     "node-uuid": "^1.4.3",
     "response-time": "~2.3.0",
     "time-grunt": "^1.1.1"
