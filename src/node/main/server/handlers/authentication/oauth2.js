@@ -90,6 +90,21 @@ export function token(req, res) {
 function resourceOwnerPasswordCredentialsToken({username, password, scope}) {
     LOG.info({username, scope}, "Performing a Resource Owner Password Credentials grant");
     return getUserByUsername(username)
+        .then((user) => {
+            if (!user.password.equals(password)) {
+                throw {
+                    username,
+                    error: 'invalid_password'
+                };
+            } else if (!user.enabled) {
+                throw {
+                    username,
+                    error: 'user_disabled'
+                };
+            } else {
+                return user;
+            }
+        })
         .catch((e) => {
             LOG.info({username, scope, error: e}, "Authentication failed");
             throw {

@@ -1,4 +1,6 @@
 import {createLogger} from 'logger';
+import {User} from './user';
+import {hash} from './password';
 
 /** The logger to use */
 const LOG = createLogger({name: 'users.userService'});
@@ -11,6 +13,23 @@ const LOG = createLogger({name: 'users.userService'});
 export function getUserByUsername(username) {
     return new Promise((resolve, reject) => {
         LOG.info({username}, "Looking up user details");
-        reject({error: "unknown_user"});
+
+        if (username === "graham") {
+            resolve(new User({
+                userId: 'abc123',
+                username: username,
+                password: hash('password'),
+                enabled: true
+            }));
+        } else if (username === "bob") {
+            resolve(new User({
+                userId: 'abc123',
+                username: username,
+                password: hash('password'),
+                enabled: false
+            }));
+        } else {
+            reject({error: "unknown_user"});
+        }
     });
 }
