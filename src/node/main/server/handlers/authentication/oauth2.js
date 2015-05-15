@@ -14,7 +14,22 @@ export function authorize(req, res) {
 
 /** Map of the Grant Type to handler functions for the Token endpoint */
 const TOKEN_HANDLERS = {
-    password: authorizationCodeToken
+    password: {
+        handler: resourceOwnerPasswordCredentialsToken,
+        params: {
+            username: {
+                required: true
+            },
+            password: {
+                required: true
+            },
+            scope: {
+                required: false,
+                default: [],
+                parse: (value) => value.split(/\s/)
+            }
+        }
+    }
 };
 
 /**
@@ -23,15 +38,41 @@ const TOKEN_HANDLERS = {
  * @param {Response} res - The response object
  */
 export function token(req, res) {
-    const grantType = req.params['grant_type'];
+    const grantType = req.body['grant_type'];
     const handler = TOKEN_HANDLERS[grantType];
 
     if (handler) {
-        handler(req)
-            .then(() => {
-            }).catch((e) => {
-                res.status(400).json(e);
-            });
+        const params = {};
+        const missingParams = [];
+
+        Object.keys(handler.params).forEach((p) => {
+            const paramDef = handler.params[p];
+            let value = req.body[p];
+            const paramName = paramDef.paramName || p;
+
+            if (value === undefined) {
+                value = paramDef.default;
+            } else if (typeof paramDef.parse === 'function') {
+                value = paramDef.parse(value);
+            }
+
+            if (value === undefined && paramDef.required) {
+                missingParams.push(p);
+            }
+
+            params[paramName] = value;
+        });
+
+        if (missingParams.length > 0) {
+            res.status(400).json({ error: 'invalid_request' });
+        } else {
+            handler.handler(params)
+                .then(() => {
+                    res.json("Hello");
+                }).catch((e) => {
+                    res.status(400).json(e);
+                });
+        }
     } else {
         res.status(400).json({ error: 'invalid_grant' });
     }
@@ -39,11 +80,17 @@ export function token(req, res) {
 
 /**
  * Handler for the OAuth2 Resource Owner Password Credentials Grant
- * @param {object} params - The parameters to the request
+ * @param {string} username - The username to authenticate
+ * @param {string} password - The password to authenticate
+ * @param {Array} scope - The scopes to authenticate
  * @return {Promise} a promise for the authentication token
  */
-function authorizationCodeToken(req) {
+function resourceOwnerPasswordCredentialsToken({username, password, scope}) {
+    const namespace = getNamespace('uk.co.grahamcox.worldbuilder');
+    const requestId = namespace.get('requestId');
+
     return new Promise((resolve, reject) => {
-        reject({error: 'invalid_request'});
+        LOG.info({req_id: requestId, username, scope}, "Performing a Resource Owner Password Credentials Grant");
+        reject({error: 'bugger'});
     });
 }
