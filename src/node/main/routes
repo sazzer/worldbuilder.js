@@ -1,3 +1,6 @@
-GET '/debug/ping' = 'server/handlers/debug#ping', name: debug/ping
-GET '/debug/now'  = 'server/handlers/debug#now',  name: debug/now
-GET '/debug'      = 'server/handlers/debug#index'
+GET '/debug/ping'           = 'server/handlers/debug#ping', name: debug/ping
+GET '/debug/now'            = 'server/handlers/debug#now',  name: debug/now
+GET '/debug'                = 'server/handlers/debug#index'
+
+GET '/auth/oauth2/authorize'= 'server/handlers/authentication/oauth2#authorize'
+POST '/auth/oauth2/token'   = 'server/handlers/authentication/oauth2#token'
