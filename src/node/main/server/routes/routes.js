@@ -31,7 +31,13 @@ export class Routes {
     apply(app, base) {
         this._routes.forEach((route) => {
             const url = base + route.url;
-            const handler = require(route.module);
+            let handler;
+            try {
+                handler = require(route.module);
+            } catch (e) {
+                handler = undefined;
+                LOG.warn(e, 'Failed to load module')
+            }
             if (handler !== undefined) {
                 const handlerMethod = handler[route.entity];
                 if (handlerMethod !== undefined) {
@@ -41,10 +47,10 @@ export class Routes {
 
                     app[expressMethod](url, handlerMethod);
                 } else {
-                    LOG.warn(`Handler entity not found: ${route.module}.${route.entity}`);
+                    LOG.warn({module: route.module, entity: route.entity}, 'Handler entity not found');
                 }
             } else {
-                LOG.warn(`Handler module not found: ${route.module}`);
+                LOG.warn({module: route.module}, 'Handler module not found');
             }
         });
     }

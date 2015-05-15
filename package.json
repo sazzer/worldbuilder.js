@@ -43,9 +43,11 @@
     "grunt-mocha-cli": "~1.13.0",
     "jit-grunt": "^0.9.1",
     "mocha": "^2.2.4",
+    "mockery": "^1.4.0",
     "moment-timezone": "^0.3.1",
     "node-uuid": "^1.4.3",
     "response-time": "~2.3.0",
+    "sinon": "^1.14.1",
     "time-grunt": "^1.1.1"
   }
 }

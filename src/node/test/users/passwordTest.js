@@ -4,24 +4,18 @@ import {Password, hash} from 'users/password';
 describe('Password', () => {
     describe('getters', () => {
         const password = new Password('salt', 'hash');
-        describe('get salt', () => {
-            const salt = password.salt;
-            it('should have the expected value', () => {
-                expect(salt).to.equal("salt");
-            });
+        it('returns the correct salt', () => {
+            expect(password.salt).to.equal('salt');
         });
-        describe('get hash', () => {
-            const hash = password.hash;
-            it('should have the expected value', () => {
-                expect(hash).to.equal("hash");
-            });
+        it('returns the correct hash', () => {
+            expect(password.hash).to.equal('hash');
         });
     });
 
     describe('hash', () => {
         describe('When providing a hash', () => {
             const password = hash('password', 'salt');
-            it('should have the expectedsalt', () => {
+            it('should have the expected salt', () => {
                 expect(password.salt).to.equal('salt');
             });
             it('should have a hash', () => {

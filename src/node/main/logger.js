@@ -24,7 +24,10 @@ export function createLogger(args) {
     LOG_LEVELS.forEach((level) => {
         result[level] = function(...msg) {
             const namespace = getNamespace('uk.co.grahamcox.worldbuilder');
-            const requestId = namespace.get('requestId');
+            let requestId;
+            if (namespace !== undefined) {
+                requestId = namespace.get('requestId');
+            }
 
             const innerLogger = logger.child({req_id: requestId});
             innerLogger[level](...msg);

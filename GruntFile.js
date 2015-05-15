@@ -61,6 +61,7 @@ module.exports = function(grunt) {
                 options: {
                     resursive: true,
                     reporter: 'spec',
+                    growl: true,
                     files: [path.join(targetTestDir, '**/*.js')]
                 }
             }
@@ -89,6 +90,14 @@ module.exports = function(grunt) {
             build: {
                 files: ['src/node/**/*'],
                 tasks: ['doc', 'test'],
+                options: {
+                    spawn: true,
+                    atBegin: true
+                }
+            },
+            test: {
+                files: ['src/node/**/*'],
+                tasks: ['test'],
                 options: {
                     spawn: true,
                     atBegin: true
